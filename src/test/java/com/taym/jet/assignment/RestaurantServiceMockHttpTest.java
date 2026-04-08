@@ -18,6 +18,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestClient;
 
 import com.taym.jet.assignment.exception.InvalidPostalCodeException;
+import com.taym.jet.assignment.exception.RestaurantsNotFoundException;
 import com.taym.jet.assignment.exception.UpstreamServiceException;
 import com.taym.jet.assignment.model.RestaurantResponse;
 import com.taym.jet.assignment.service.RestaurantService;
@@ -51,9 +52,10 @@ class RestaurantServiceMockHttpTest {
                       "rating": { "starRating": 4.5 },
                       "address": {
                         "city": "London",
-                        "firstLine": "1 Test St",
+                        "firstLine": "1 Pizza St",
                         "postalCode": "EC4M 7RF",
-                        "location": { "type": "Point", "coordinates": [-0.1, 51.5] }
+                        "location": { "type": "Point", "coordinates": [-0.1, 51.5] },
+                        "unexpectedField": "boo"
                       }
                     }
                   ]
@@ -109,4 +111,14 @@ class RestaurantServiceMockHttpTest {
                 assertThrows(UpstreamServiceException.class, () -> restaurantService.getUkRestaurants("EC4M7RF"));
         assertTrue(exception.getMessage().contains("Just Eat API is currently unavailable"));
     }
+
+    @Test
+    void getUkRestaurants_throwsRestaurantsNotFound_whenUpstreamReturns404() {
+        server.expect(requestTo("https://api.test/discovery/uk/restaurants/enriched/bypostcode/EC4M7RF"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.NOT_FOUND));
+                
+                assertThrows(RestaurantsNotFoundException.class,
+            () -> restaurantService.getUkRestaurants("EC4M7RF"));
+}
 }

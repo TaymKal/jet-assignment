@@ -2,6 +2,7 @@ package com.taym.jet.assignment;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -128,4 +129,23 @@ public class RestaurantServiceTest {
         RestaurantResponse result = restaurantService.getUkRestaurants("EC4M7RF");
         assertSame(response, result);
     }
+
+    @Test
+    void getUkRestaurants_shouldWrapRestClientExceptionWithExpectedMessage() {
+        when(postalCodeValidator.isValidUkPostalCode("EC4M7RF")).thenReturn(true);
+        when(restClient.get()
+            .uri("/discovery/uk/restaurants/enriched/bypostcode/{postcode}", "EC4M7RF")
+            .retrieve()
+            .onStatus(any(), any())
+            .onStatus(any(), any())
+            .onStatus(any(), any())
+            .body(RestaurantResponse.class))
+        .thenThrow(new RestClientException("network down"));
+
+        UpstreamServiceException ex = assertThrows(
+            UpstreamServiceException.class,
+            () -> restaurantService.getUkRestaurants("EC4M7RF"));
+
+        assertTrue(ex.getMessage().contains("Failed to call Just Eat API"));
+}
 }
