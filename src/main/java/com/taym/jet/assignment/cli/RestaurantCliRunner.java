@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.taym.jet.assignment.exception.InvalidPostalCodeException;
@@ -17,6 +18,7 @@ import com.taym.jet.assignment.service.RestaurantService;
 import com.taym.jet.assignment.view.RestaurantView;
 
 @Component
+@Profile("!test")
 public class RestaurantCliRunner implements CommandLineRunner {
     private final RestaurantService restaurantService;
     private final int restaurantLimit;
