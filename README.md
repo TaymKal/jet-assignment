@@ -1,5 +1,54 @@
 # Restaurant Discovery CLI
 
+## Setup
+
+### Prerequisites
+
+- **JDK 21 or newer** (required by this project; see `java.version` in `pom.xml`). Verify with `java -version`.
+- **Network access** on the first run: the Maven Wrapper may download Apache Maven (see `distributionUrl` in `.mvn/wrapper/maven-wrapper.properties`).
+
+### Maven Wrapper vs local Maven
+
+Use the **Maven Wrapper** scripts in the repo root (`mvnw` / `mvnw.cmd`) so you do not need Maven installed globally. The wrapper pins the Maven version for this project.
+
+If you already have **Apache Maven installed** and on your `PATH`, you can run the same goals with `mvn` instead of `mvnw` / `mvnw.cmd` (for example `mvn test` instead of `./mvnw.cmd test`).
+
+### Build
+
+- Windows (PowerShell / cmd, from repo root): `.\mvnw.cmd clean package`  
+- macOS / Linux: `./mvnw clean package`  
+- With local Maven: `mvn clean package`
+
+### Run
+
+- Windows: `.\mvnw.cmd spring-boot:run`  
+- macOS / Linux: `./mvnw spring-boot:run`  
+- With local Maven: `mvn spring-boot:run`
+
+When prompted, enter a UK postcode (example: `EC4M7RF`) or type `exit` to quit.
+
+### Example output
+
+```text
+Enter UK postcode (or type 'exit' to quit): EC4M7RF
+
+Here are 10 restaurants for EC4M7RF:
+
+1. Test Pizza | Rating: 4.5 | Cuisines: [Pizza] | Address: 10 Example Street, EC4M7RF
+```
+
+### Tests
+
+- Windows: `.\mvnw.cmd test`  
+- macOS / Linux: `./mvnw test`  
+- With local Maven: `mvn test`
+
+Run a single test class (example):
+
+- Windows: `.\mvnw.cmd -Dtest=RestaurantCliRunnerTest test`  
+- macOS / Linux: `./mvnw -Dtest=RestaurantCliRunnerTest test`  
+- With local Maven: `mvn -Dtest=RestaurantCliRunnerTest test`
+
 ## Project Summary
 
 This is a Spring Boot command-line application that fetches restaurant data from the Just Eat API for a UK postcode and displays the first 10 returned restaurants with:
@@ -48,46 +97,6 @@ The application handles common failure scenarios explicitly, including:
 
 These are mapped to domain-specific exceptions and user-friendly CLI messages.
 
-## Running the Application
-
-### Prerequisites
-
-- Java 21+
-- Maven Wrapper (included)
-
-### Build
-
-- Windows: `./mvnw.cmd clean package`
-- macOS/Linux: `./mvnw clean package`
-
-### Run
-
-- Windows: `./mvnw.cmd spring-boot:run`
-- macOS/Linux: `./mvnw spring-boot:run`
-
-When prompted, enter a UK postcode (example: `EC4M7RF`) or type `exit` to quit.
-
-### Example output
-
-```text
-Enter UK postcode (or type 'exit' to quit): EC4M7RF
-
-Here are 10 restaurants for EC4M7RF:
-
-1. Test Pizza | Rating: 4.5 | Cuisines: [Pizza] | Address: 10 Example Street, EC4M7RF
-```
-
-## Running Tests
-
-### Run all tests
-
-- Windows: `./mvnw.cmd test`
-- macOS/Linux: `./mvnw test`
-
-### Run a specific test class
-
-- Windows: `./mvnw.cmd -Dtest=RestaurantCliRunnerTest test`
-
 ## Testing Strategy
 
 I used a layered testing approach:
@@ -112,6 +121,7 @@ This gives deterministic and reliable test coverage without depending on live AP
 
 ## AI Tool Usage
 
-- Used AI primarily in Ask mode for guidance and debugging support, not to generate the full solution.
+- Used AI primarily in Ask mode for guidance and debugging support, not to generate solutions.
 - AI assisted with Spring Boot CLI approach, graceful shutdown configuration, and Mockito test syntax.
 - I implemented the core architecture and application logic myself, and all AI-assisted changes were reviewed and validated locally.
+

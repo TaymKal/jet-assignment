@@ -63,7 +63,7 @@ public class RestaurantCliRunner implements CommandLineRunner {
             return initialPostalCode;
         }
 
-        System.out.print("Enter UK postcode (or type 'exit' to quit): ");
+        System.out.print("\nEnter UK postcode (or type 'exit' to quit): ");
         
         
         return scanner.nextLine().trim();
